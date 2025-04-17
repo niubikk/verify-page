@@ -25,12 +25,12 @@
       text-align: center;
       box-sizing: border-box;
       transition: all 0.3s;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       border-radius: 12px;
+      overflow: hidden;
     }
     .title {
       font-size: 24px;
@@ -111,10 +111,7 @@
     const colors = ['#4CAF50', '#FF5722', '#2196F3', '#FFC107', '#9C27B0'];
     const bgColors = ['#F1F8E9', '#FFEBEE', '#E3F2FD', '#FFF8E1', '#F3E5F5'];
 
-    // 随机选择形状
-    const shapes = ['circle', 'triangle', 'rectangle'];
-
-    // 随机文本内容
+    // 随机选择文本内容
     const texts = ['点击确认你是真人', '请点击验证', '点击按钮开始验证', '验证一下，点击我'];
 
     // 随机选择字体大小和样式
@@ -128,34 +125,16 @@
 
     // 随机改变样式
     function randomizeCaptcha() {
-      const randomShape = getRandomElement(shapes);
       const randomColor = getRandomElement(colors);
       const randomBgColor = getRandomElement(bgColors);
       const randomFontSize = getRandomElement(fontSizes);
       const randomFont = getRandomElement(fonts);
       const randomText = getRandomElement(texts);
 
-      // 随机设置容器的形状
-      if (randomShape === 'circle') {
-        captchaContainer.style.borderRadius = '50%';
-        captchaContainer.style.width = '200px';
-        captchaContainer.style.height = '200px';
-      } else if (randomShape === 'triangle') {
-        captchaContainer.style.width = '0';
-        captchaContainer.style.height = '0';
-        captchaContainer.style.borderLeft = '100px solid transparent';
-        captchaContainer.style.borderRight = '100px solid transparent';
-        captchaContainer.style.borderBottom = '200px solid ' + randomBgColor;
-        captchaContainer.style.borderRadius = '0';
-      } else {
-        captchaContainer.style.width = '100%';
-        captchaContainer.style.height = '250px';
-        captchaContainer.style.borderRadius = '12px';
-      }
-
+      // 设置容器样式
       captchaContainer.style.backgroundColor = randomBgColor;
 
-      // 随机设置字体样式
+      // 设置标题文本和样式
       title.textContent = randomText;
       title.style.fontSize = randomFontSize;
       title.style.fontFamily = randomFont;
