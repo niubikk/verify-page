@@ -1,16 +1,76 @@
-<button onclick="shareToQQ()">分享到 QQ</button>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>点击分享到QQ</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .share-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .share-container h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .share-btn {
+      background-color: #12b7f5;
+      color: white;
+      font-size: 18px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .share-btn:hover {
+      background-color: #0ea2d4;
+    }
+
+    .note {
+      margin-top: 20px;
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="share-container">
+  <h2>点击按钮分享到 QQ 好友</h2>
+  <button class="share-btn" onclick="shareToQQ()">👉 点我分享</button>
+  <div class="note">请在 QQ 或微信中打开此页面</div>
+</div>
 
 <script>
-    function shareToQQ() {
-        const title = '分享标题';  // 分享的标题
-        const summary = '分享内容';  // 分享的描述内容
-        const url = 'https://niubikk.github.io/verify-page/';  // 你想分享的网址
-        const imageUrl = 'https://yourwebsite.com/path/to/image.jpg';  // 分享的图片URL（可选）
+  function shareToQQ() {
+    const shareUrl = encodeURIComponent('https://niubikk.github.io/verify-page/');
+    const title = encodeURIComponent('我真的是真人，不是机器人！');
+    const description = encodeURIComponent('快来看这个项目，是真的有意思！');
+    const preview = encodeURIComponent('https://niubikk.github.io/verify-page/cover.jpg');
 
-        // 调用 QQ 分享页面生成分享链接
-        const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}&pics=${encodeURIComponent(imageUrl)}`;
-
-        // 打开分享链接
-        window.open(qqShareUrl, '_blank');
-    }
+    const mqqUrl = `mqqapi://share/to_fri?src_type=web&file_type=news&share_id=1101685683&title=${title}&url=${shareUrl}&description=${description}&previewimageUrl=${preview}`;
+    
+    // 打开 mqqapi:// 协议
+    window.location.href = mqqUrl;
+  }
 </script>
+
+</body>
+</html>
