@@ -15,9 +15,10 @@
       background-color: #f7f7f7;
     }
     .captcha-container {
-      width: 320px;
-      height: 180px;
-      max-height: 180px;
+      width: 100%;
+      max-width: 350px;
+      min-width: 250px;
+      height: 250px;
       background-color: white;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
@@ -27,8 +28,9 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      border-radius: 12px;
     }
     .title {
       font-size: 24px;
@@ -70,6 +72,23 @@
     }
     .message.fail {
       color: #e74c3c;
+    }
+    /* 响应式设计 */
+    @media (max-width: 600px) {
+      .captcha-container {
+        width: 90%;
+        height: 200px;
+      }
+      .title {
+        font-size: 20px;
+      }
+      .description {
+        font-size: 12px;
+      }
+      .verify-btn {
+        font-size: 14px;
+        padding: 8px 15px;
+      }
     }
   </style>
 </head>
@@ -119,18 +138,18 @@
       // 随机设置容器的形状
       if (randomShape === 'circle') {
         captchaContainer.style.borderRadius = '50%';
-        captchaContainer.style.width = '180px';
-        captchaContainer.style.height = '180px';
+        captchaContainer.style.width = '200px';
+        captchaContainer.style.height = '200px';
       } else if (randomShape === 'triangle') {
         captchaContainer.style.width = '0';
         captchaContainer.style.height = '0';
-        captchaContainer.style.borderLeft = '90px solid transparent';
-        captchaContainer.style.borderRight = '90px solid transparent';
-        captchaContainer.style.borderBottom = '180px solid ' + randomBgColor;
+        captchaContainer.style.borderLeft = '100px solid transparent';
+        captchaContainer.style.borderRight = '100px solid transparent';
+        captchaContainer.style.borderBottom = '200px solid ' + randomBgColor;
         captchaContainer.style.borderRadius = '0';
       } else {
-        captchaContainer.style.width = '320px';
-        captchaContainer.style.height = '180px';
+        captchaContainer.style.width = '100%';
+        captchaContainer.style.height = '250px';
         captchaContainer.style.borderRadius = '12px';
       }
 
