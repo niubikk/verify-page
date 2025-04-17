@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>简易动态验证</title>
+  <title>防封验证码</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,90 +11,104 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f5f5f5;
+      margin: 0;
+      background-color: #f7f7f7;
     }
-    .container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    .captcha-container {
       width: 300px;
-      text-align: center;
+      height: 100px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
     }
-    .button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #5CB85C;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 10px;
+    /* 使用纯色背景 */
+    .captcha-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #4CAF50; /* 绿色背景 */
       transition: all 0.3s;
     }
-    .button:hover {
-      background-color: #4CAe4C;
-      transform: scale(1.1);
+    .slider {
+      width: 40px;
+      height: 40px;
+      background-color: #5b9bd5;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transform: translateY(-50%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .hidden {
+    .slider:hover {
+      background-color: #4a8dd0;
+    }
+    .message {
       display: none;
+      text-align: center;
+      padding: 10px;
+      background-color: #dff0d8;
+      color: #3c763d;
+      border-radius: 4px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h3 id="title">点击下方按钮进行验证</h3>
-    <button class="button" id="verifyBtn">点击验证</button>
-    <div id="resultMessage" class="hidden">
-      <p>验证通过，正在跳转...</p>
-    </div>
+  <div class="captcha-container">
+    <div class="captcha-bg" id="captcha-bg"></div>
+    <div class="slider" id="slider"></div>
   </div>
-
+  <div class="message" id="message">验证通过！</div>
   <script>
-    // 随机更改按钮样式
-    function changeButtonStyle() {
-      const button = document.getElementById('verifyBtn');
-      const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); // 随机颜色
-      const randomSize = Math.floor(Math.random() * 5 + 10) + 'px';  // 随机字体大小
-      const randomPosition = Math.random() > 0.5 ? 'center' : 'left';  // 随机位置
+    let slider = document.getElementById('slider');
+    let captchaBg = document.getElementById('captcha-bg');
+    let message = document.getElementById('message');
+    let isSliding = false;
 
-      // 随机更新样式
-      button.style.backgroundColor = randomColor;
-      button.style.fontSize = randomSize;
-      button.style.textAlign = randomPosition;
-    }
+    slider.onmousedown = function(event) {
+      event.preventDefault();
+      isSliding = true;
+      let shiftX = event.clientX - slider.getBoundingClientRect().left;
 
-    // 随机更改按钮文本
-    function changeButtonText() {
-      const button = document.getElementById('verifyBtn');
-      const buttonTexts = ['验证一下', '点击确认', '开始验证', '点此继续', '完成验证'];
-      const randomText = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
-      button.innerHTML = randomText;
-    }
+      function moveAt(pageX) {
+        let newX = pageX - shiftX - captchaBg.getBoundingClientRect().left;
+        if (newX < 0) newX = 0;
+        let rightEdge = captchaBg.offsetWidth - slider.offsetWidth;
+        if (newX > rightEdge) newX = rightEdge;
+        slider.style.left = newX + 'px';
+      }
 
-    // 随机更改标题
-    function changeTitle() {
-      const title = document.getElementById('title');
-      const titles = ['点击验证', '请进行验证', '验证开始', '确认进入', '验证步骤'];
-      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-      title.innerHTML = randomTitle;
-    }
+      function onMouseMove(event) {
+        if (!isSliding) return;
+        moveAt(event.pageX);
+      }
 
-    // 点击按钮验证
-    document.getElementById('verifyBtn').addEventListener('click', function() {
-      // 显示验证通过信息
-      document.getElementById('resultMessage').classList.remove('hidden');
-      // 模拟延迟后跳转
-      setTimeout(function() {
-        window.location.href = "https://163.com";  // 修改为您的目标网站
-      }, 1500); // 延迟1.5秒跳转
-    });
+      function onMouseUp() {
+        isSliding = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
 
-    // 页面加载时随机更新样式、文本、标题
-    window.onload = function() {
-      changeButtonStyle();
-      changeButtonText();
-      changeTitle();
+        let offset = slider.offsetLeft;
+        if (offset >= captchaBg.offsetWidth - slider.offsetWidth) {
+          captchaBg.style.transform = 'translateX(-100%)';
+          message.style.display = 'block';
+
+          // 跳转到指定页面
+          setTimeout(function() {
+            window.location.href = 'https://163.com';  // 在此处替换为你要跳转的 URL
+          }, 1000); // 1秒后跳转
+        } else {
+          slider.style.left = '0px';
+        }
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
     };
   </script>
 </body>
